@@ -1,11 +1,11 @@
-const { getGames } = require("./model");
+const { getGames, postNewGame } = require("./model");
 
 // Define the POST request handler function
 const GET = async (req, res) => {	
   try {
-    const model = await getGames('smtha')
+    const model = await getGames()
 
-  // If an error occurs, send a 200 status code and the error message to the user
+    res.send(model)
   } catch (error) {
     res.status(200).send(error || 'something went wrong');
   }
@@ -13,16 +13,34 @@ const GET = async (req, res) => {
 
 const POST = async (req, res) => {	
   try {
-    const model = await getGames('smtha')
-    res.send(model)
-  // If an error occurs, send a 200 status code and the error message to the user
+    const model = await postNewGame(req.body)
+
+    if (!model) {
+      res.status(200).send('Game successfully created')
+    } else {
+      res.send(model)
+    }
   } catch (error) {
     res.status(200).send(error || 'something went wrong');
   }
 }
 
-// Export the POST request handler function
+const UPDATE = async (req, res) => {
+  console.log(req.body);
+
+  
+
+  res.send('work')
+}
+
+const DELETE = async (req, res) => {
+  console.log(req.query.id);
+  res.send('sd')
+}
+
 module.exports = {
   GET,
-  POST
+  POST,
+  UPDATE,
+  DELETE,
 }
