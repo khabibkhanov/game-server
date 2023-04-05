@@ -1,4 +1,4 @@
-const { getGames, postNewGame } = require("./model");
+const { getGames, postNewGame, updateGame, deleteGame } = require("./model");
 
 // Define the POST request handler function
 const GET = async (req, res) => {	
@@ -26,16 +26,30 @@ const POST = async (req, res) => {
 }
 
 const UPDATE = async (req, res) => {
-  console.log(req.body);
-
+  try {
+    const update = await updateGame(req.body, req.query.id)
   
-
-  res.send('work')
+    if (!update) {
+      res.send("Data successfully updated")
+    } else {
+      throw "something went wrong with update\n" + update
+    }
+  } catch (error) {
+    res.send(error || 'something went wrong')
+  }
 }
 
 const DELETE = async (req, res) => {
-  console.log(req.query.id);
-  res.send('sd')
+ try {
+    const model = await deleteGame(req.query.id)
+    if (!model) {
+      res.send("Data successfully deleted")
+    } else {
+      throw "something went wrong with delete\n" + update
+    }
+ } catch (error) {
+    res.send(error || 'something went wrong')
+ }
 }
 
 module.exports = {

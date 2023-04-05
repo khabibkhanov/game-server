@@ -22,13 +22,14 @@ const UPDATE_GAME = `
 		purchase_info = $5,
 		game_picture_url = $6,
 		age_rating = $7,
-		category_id = $8
+		category_id = $8,
+		game_updated_at = CURRENT_TIMESTAMP
 	WHERE game_id = $9;
 `
 
 const DELETE_GAME = `
 	UPDATE games
-	SET game_deleted_at = current_timestamp
+	SET game_deleted_at = CURRENT_TIMESTAMP
 	WHERE game_id = $1;
 `
 
