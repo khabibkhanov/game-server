@@ -8,8 +8,7 @@ const getNewsList = async () => {
         let users = await fetchAll(GET_NEWS)
         return users
     } catch (error) {
-        console.error(error);
-        return error || 'something went wrong'
+        return error
     }
 }
 

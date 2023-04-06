@@ -1,5 +1,5 @@
 const GET_NEWS = `
-	SELECT news_id, news_title, news_slug, news_text, news_pic_url, news_created_at
+	SELECT news_id, news_title, news_slug, news_text, news_pic_url, news_created_at,
 		JSON_BUILD_OBJECT('id', news_tag.tag_id, 'title', news_tag.tag_title, 'slug', news_tag.tag_slug) AS tags
 	FROM news
 	JOIN news_tag ON news.tag = news_tag.tag_id
@@ -35,7 +35,7 @@ const TAGS = `
 module.exports = {
 	GET_NEWS,
 	CREATE_NEWS,
-	TAGS,
 	UPDATE_NEWS,
-	DELETE_NEWS
+	DELETE_NEWS,
+	TAGS
 }

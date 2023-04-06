@@ -4,10 +4,11 @@ const { getNewsList, createNews, updateNews, deleteNews } = require("./model");
 const GET = async (req, res) => {	
   try {
     const model = await getNewsList()
-
-    res.send(model)
+    console.log(model);
+    res.status(200).send(model)
   } catch (error) {
-    res.status(200).send(error || 'something went wrong');
+    console.log(error);
+    res.status(404).send(error || 'something went wrong');
   }
 }
 
@@ -18,7 +19,7 @@ const POST = async (req, res) => {
       res.status(200).send('News successfully created')
     } else {
     console.log(req.body);
-
+      
       res.send(model)
     }
   } catch (error) {
