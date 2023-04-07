@@ -14,7 +14,6 @@ const GET = async (req, res) => {
 const POST = async (req, res) => {	
   try {
     const model = await postNewGame(req.body)
-    console.log(model);
     if (!model) {
       res.status(200).send('Game successfully created')
     } else {

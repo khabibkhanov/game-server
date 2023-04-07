@@ -1,24 +1,60 @@
 const path = require("path")
+const { CREATE_REQS } = require("./query")
 const { fetchAll, fetch } = require(path.join(__dirname, "..", "..", "libs", "postgres"))
 const { GET_GAMES, CREATE_GAME, CATEGORIES, AGE_RATING, UPDATE_GAME, DELETE_GAME } = require(path.join(__dirname, "query"))
     
 const getGames = async () => {	
     try {
-        let users = await fetchAll(GET_GAMES)
-        return users
+        let games = await fetchAll(GET_GAMES)
+        console.log(games);
+        return games
     } catch (error) {
         console.error(error);
         return error || 'something went wrong'
     }
 }
 
-const postNewGame = async ({game_title, game_slug, game_info, game_release, purchase_info, game_picture_url, cat_id, rating_id}) => {
+const postNewGame = async ({game_title, game_slug, game_info, game_release, purchase_info, game_picture_url, cat_id, rating_id, requirements}) => {
     try {
         const categories = await fetch(CATEGORIES, cat_id)
         const age_rating = await fetch(AGE_RATING, rating_id)
+
+        const {
+            type,
+            system,
+            title,
+            processor,
+            ram,
+            graphic_card,
+            storage,
+            sound_card,
+            directx,
+            internet,
+            additional_notes
+        } = requirements || {};
+
         if (categories && age_rating) {
             const set = await fetch( CREATE_GAME, game_title, game_slug, game_info, game_release, purchase_info, game_picture_url, rating_id, cat_id )
-            return set
+            
+            if (set.game_id) {
+
+                const reqs = await fetch(CREATE_REQS,
+                    set.game_id,
+                    type || null,
+                    title || null,
+                    system || null,
+                    processor || null,
+                    ram || null,
+                    graphic_card || null,
+                    storage || null,
+                    sound_card || null,
+                    directx || null,
+                    internet || null,
+                    additional_notes || null
+                );
+
+                console.log(reqs);   
+            }
         } else {
             throw "category or age rating is not defined"
         }
@@ -53,7 +89,6 @@ const deleteGame = async (game_id) => {
             DELETE_GAME,
             game_id
         )
-
         return deleted
     } catch (error) {
         console.log(error);

@@ -1,7 +1,7 @@
 const express = require('express')
 const path = require('path')
 const app = express()
-const port = 2233
+const port = 3000
 
 // Use the built-in Express middleware for parsing JSON data
 app.use(express.json());
