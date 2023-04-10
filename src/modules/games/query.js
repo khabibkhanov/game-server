@@ -12,17 +12,6 @@ const GET_GAMES = `
 		COALESCE(
 			JSON_AGG(
 				JSON_BUILD_OBJECT(
-					'guide_id', game_guides.guide_id, 
-					'guide_title', game_guides.guide_title, 
-					'guide_slug', game_guides.guide_slug, 
-					'guide_text', game_guides.guide_text
-				)
-			) FILTER (WHERE game_guides.guide_id IS NOT NULL),
-			'[]'
-		) AS guides,
-		COALESCE(
-			JSON_AGG(
-				JSON_BUILD_OBJECT(
 					'req_id', system_requirements.req_id, 
 					'req_type', system_requirements.req_type, 
 					'req_title', system_requirements.req_title, 
@@ -40,7 +29,6 @@ const GET_GAMES = `
 		games
 		JOIN age_ratings ON games.age_rating = age_ratings.rating_id
 		JOIN categories ON games.category_id = categories.cat_id
-		LEFT JOIN game_guides ON games.game_id = game_guides.game_id
 		LEFT JOIN system_requirements ON games.game_id = system_requirements.games
 	WHERE
 		games.game_deleted_at IS NULL
@@ -75,6 +63,23 @@ const UPDATE_GAME = `
 	WHERE game_id = $9;
 `
 
+const UPDATE_REQS = `
+	UPDATE system_requirements
+	SET games = $1,
+		req_type = $2,
+		req_title = $3,
+		req_system = $4,
+		req_processor = $5,
+		req_ram = $6,
+		req_graphic_card = $7,
+		req_storage = $8,
+		req_sound_card = $9,
+		req_directx = $10,
+		req_internet = $11,
+		req_additional_notes = $12
+	WHERE req_id = $13
+`
+
 const DELETE_GAME = `
 	UPDATE games
 	SET game_deleted_at = CURRENT_TIMESTAMP
@@ -98,6 +103,7 @@ module.exports = {
 	GET_GAMES,
 	CREATE_GAME,
 	UPDATE_GAME,
+	UPDATE_REQS,
 	DELETE_GAME,
 	SET_CATEGORY,
 	CATEGORIES,
